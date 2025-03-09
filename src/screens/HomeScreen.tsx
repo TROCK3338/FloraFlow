@@ -2,20 +2,21 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
-const HomeScreen = () => {
+interface HomeScreenProps {
+  username: string; // Add username prop
+}
+
+const HomeScreen: React.FC<HomeScreenProps> = ({ username }) => {
   return (
-    // Added ImageBackground
     <ImageBackground
-      // source={require("../../assets/images/bg_img.jpeg")}
       source={require("../../assets/images/bg_img3.png")}
-      // source={require("../../assets/images/bg_img2.png")} // Change the path to your image
       style={styles.backgroundImage}
       resizeMode="cover"
     >
       <View style={styles.container}>
         {/* HEADER */}
         <View style={styles.header}>
-          <Text style={styles.greeting}>Good Morning, Martina!</Text>
+          <Text style={styles.greeting}>Good Morning, {username}!</Text> {/* Dynamic greeting */}
           <TouchableOpacity>
             <Ionicons name="menu" size={28} color="black" />
           </TouchableOpacity>
@@ -34,19 +35,19 @@ const HomeScreen = () => {
         {/* PERIOD TRACKER CIRCLE */}
         <View style={styles.trackerContainer}>
           <View style={styles.outertrackerCircle}>
-          <View style={styles.trackerCircle}>
-            <Text style={styles.trackerText}>Your period starts in</Text>
-            <Text style={styles.trackerDays}>4 days</Text>
-            <View style={styles.circleDivider} />
-            <Text style={styles.trackerSubText}>Low pregnancy chance</Text>
-          </View>
+            <View style={styles.trackerCircle}>
+              <Text style={styles.trackerText}>Your period starts in</Text>
+              <Text style={styles.trackerDays}>4 days</Text>
+              <View style={styles.circleDivider} />
+              <Text style={styles.trackerSubText}>Low pregnancy chance</Text>
+            </View>
           </View>
         </View>
 
         {/* DAILY INSIGHTS */}
         <View style={styles.insightsHeader}>
-        <Text style={styles.insightsTitle}>YOUR DAILY INSIGHTS</Text>
-        <View style={styles.divider} />
+          <Text style={styles.insightsTitle}>YOUR DAILY INSIGHTS</Text>
+          <View style={styles.divider} />
         </View>
         <View style={styles.insightsContainer}>
           <View style={[styles.insightBox, { backgroundColor: "#D16B66" }]}>
@@ -132,7 +133,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   outertrackerCircle: {
-    width: 280, // Slightly larger than trackerCircle
+    width: 280,
     height: 280,
     borderRadius: 132,
     borderWidth: 2,
@@ -162,13 +163,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     marginTop: 5,
     paddingHorizontal: 35,
-    textAlign: "center", // Ensures the text is centered
+    textAlign: "center",
   },
   insightsHeader: {
     alignItems: "center",
     marginBottom: 10,
   },
-  
   insightsTitle: {
     fontSize: 18,
     fontWeight: "bold",

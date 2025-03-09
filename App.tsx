@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./src/navigation/index"; // Ensure correct path
+import AppNavigator from "../Sihana/src/navigation/index"; // Ensure correct path
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false); // Default to false
