@@ -1,9 +1,10 @@
+// src/screens/HomeScreen.tsx
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, ImageBackground } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 
 interface HomeScreenProps {
-  username: string; // Add username prop
+  username: string; // Username passed from parent component
 }
 
 const HomeScreen: React.FC<HomeScreenProps> = ({ username }) => {

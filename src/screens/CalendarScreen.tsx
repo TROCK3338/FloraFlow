@@ -5,6 +5,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 const CalendarScreen = () => {
   const [currentMonth, setCurrentMonth] = useState('March');
   
+
   // Sample data for the calendar
   const daysOfWeek = ['Mon', 'Tu', 'We', 'Thu', 'Fri', 'Sa', 'Su'];
   const daysInMonth = [
