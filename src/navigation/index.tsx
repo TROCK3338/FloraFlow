@@ -3,14 +3,22 @@ import { createStackNavigator } from "@react-navigation/stack";
 import BrandingScreen from "../screens/BrandingScreen";
 import UsernameScreen from "../screens/UsernameScreen";
 import HomeScreen from "../screens/HomeScreen";
+import CycleDayDetail from '../screens/CycleDayDetail';
+import OvulationDetail from '../screens/OvulationDetail';
+import AddInfo from "../screens/AddInfo";
+import SymptomsLogger from "../screens/SymptomsLogger";
 import BottomNav from "../components/BottomNav";
 
 // Define navigation props
-type RootStackParamList = {
+export type RootStackParamList = {
   BrandingScreen: { onStartNow: () => void };
   UsernameScreen: { setUsername: React.Dispatch<React.SetStateAction<string>> };
   HomeScreen: { username: string };
   MainApp: undefined;
+  CycleDayDetail: { cycleDay: number; cyclePhase: string };
+  OvulationDetail: { daysToOvulation: number; fertilitySummary: string };
+  SymptomsLogger: undefined;
+  AddInfo: undefined; 
 };
 
 type AppNavigatorProps = {
@@ -24,25 +32,21 @@ export default function AppNavigator({ isLoggedIn, setIsLoggedIn }: AppNavigator
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (
-        <Stack.Screen name="MainApp" component={BottomNav} />
+        <>
+          <Stack.Screen name="MainApp" component={BottomNav} />
+          <Stack.Screen name="CycleDayDetail" component={CycleDayDetail} />
+          <Stack.Screen name="OvulationDetail" component={OvulationDetail} />
+          <Stack.Screen name="SymptomsLogger" component={SymptomsLogger} />
+          <Stack.Screen name="AddInfo" component={AddInfo} />
+        </>
       ) : (
         <>
-          {/* Pass onStartNow prop to BrandingScreen */}
-          <Stack.Screen name="BrandingScreen">
-            {(props) => <BrandingScreen {...props} onStartNow={() => {}} />}
-          </Stack.Screen>
-
-          {/* Pass setUsername prop to UsernameScreen */}
-          <Stack.Screen name="UsernameScreen">
-            {(props) => <UsernameScreen {...props} setIsLoggedIn={setIsLoggedIn} setUsername={() => {}} />}
-          </Stack.Screen>
-
-          {/* Pass username prop to HomeScreen */}
-          <Stack.Screen name="HomeScreen">
-            {(props) => <HomeScreen {...props} username="Guest" />}
-          </Stack.Screen>
+          <Stack.Screen name="BrandingScreen" component={BrandingScreen} />
+          <Stack.Screen name="UsernameScreen" component={UsernameScreen} />
+          <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </>
       )}
+      <Stack.Screen name="CycleDayDetail" component={CycleDayDetail} />
     </Stack.Navigator>
   );
 }
