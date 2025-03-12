@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// Screens
 import BrandingScreen from "../screens/BrandingScreen";
 import UsernameScreen from "../screens/UsernameScreen";
 import HomeScreen from "../screens/HomeScreen";
-import CycleDayDetail from '../screens/CycleDayDetail';
-import OvulationDetail from '../screens/OvulationDetail';
-import AddInfo from "../screens/AddInfo";
-import SymptomsLogger from "../screens/SymptomsLogger";
 import BottomNav from "../components/BottomNav";
+
+// Onboarding Screens
+import CycleRegularityScreen from "../screens/Onboarding/CycleRegularityScreen";
+import SymptomsScreen from "../screens/Onboarding/SymptomsScreen";
+import HealthDisordersScreen from "../screens/Onboarding/HealthDisordersScreen";
+import PeriodLoggingScreen from "../screens/Onboarding/PeriodLoggingScreen";
+import CompletionScreen from "../screens/Onboarding/CompletionScreen";
 
 // Define navigation props
 export type RootStackParamList = {
@@ -15,10 +21,11 @@ export type RootStackParamList = {
   UsernameScreen: { setUsername: React.Dispatch<React.SetStateAction<string>> };
   HomeScreen: { username: string };
   MainApp: undefined;
-  CycleDayDetail: { cycleDay: number; cyclePhase: string };
-  OvulationDetail: { daysToOvulation: number; fertilitySummary: string };
-  SymptomsLogger: undefined;
-  AddInfo: undefined; 
+  CycleRegularityScreen: undefined;
+  SymptomsScreen: undefined;
+  HealthDisordersScreen: undefined;
+  PeriodLoggingScreen: undefined;
+  CompletionScreen: undefined;
 };
 
 type AppNavigatorProps = {
@@ -29,16 +36,36 @@ type AppNavigatorProps = {
 const Stack = createStackNavigator<RootStackParamList>();
 
 export default function AppNavigator({ isLoggedIn, setIsLoggedIn }: AppNavigatorProps) {
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      const status = await AsyncStorage.getItem("hasCompletedOnboarding");
+      setHasCompletedOnboarding(status === "true");
+    };
+    checkOnboardingStatus();
+  }, []);
+
+  if (hasCompletedOnboarding === null) return null; // Prevent flicker while checking onboarding status
+
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isLoggedIn ? (
-        <>
+        hasCompletedOnboarding ? (
           <Stack.Screen name="MainApp" component={BottomNav} />
-          <Stack.Screen name="CycleDayDetail" component={CycleDayDetail} />
-          <Stack.Screen name="OvulationDetail" component={OvulationDetail} />
-          <Stack.Screen name="SymptomsLogger" component={SymptomsLogger} />
-          <Stack.Screen name="AddInfo" component={AddInfo} />
-        </>
+        ) : (
+          <>
+            <Stack.Screen name="CycleRegularityScreen" component={CycleRegularityScreen} />
+            <Stack.Screen name="SymptomsScreen" component={SymptomsScreen} />
+            <Stack.Screen name="HealthDisordersScreen" component={HealthDisordersScreen} />
+            <Stack.Screen name="PeriodLoggingScreen" component={PeriodLoggingScreen} />
+            <Stack.Screen 
+              name="CompletionScreen" 
+              component={CompletionScreen} 
+              options={{ gestureEnabled: false }} 
+            />
+          </>
+        )
       ) : (
         <>
           <Stack.Screen name="BrandingScreen" component={BrandingScreen} />
@@ -46,7 +73,6 @@ export default function AppNavigator({ isLoggedIn, setIsLoggedIn }: AppNavigator
           <Stack.Screen name="HomeScreen" component={HomeScreen} />
         </>
       )}
-      <Stack.Screen name="CycleDayDetail" component={CycleDayDetail} />
     </Stack.Navigator>
   );
 }
