@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { NavigationContainer } from "@react-navigation/native";
-import AppNavigator from "./src/navigation/index"; // Ensure correct path
+import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
+import AppNavigator from './src/navigation';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Default to false
-
   return (
-    <NavigationContainer>
-      <AppNavigator isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-    </NavigationContainer>
+    <SafeAreaProvider>
+      <StatusBar style="auto" />
+      <AppNavigator />
+    </SafeAreaProvider>
   );
 }

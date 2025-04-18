@@ -1,78 +1,160 @@
-import React, { useState, useEffect } from "react";
-import { createStackNavigator } from "@react-navigation/stack";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useState, useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// Screens
-import BrandingScreen from "../screens/BrandingScreen";
-import UsernameScreen from "../screens/UsernameScreen";
-import HomeScreen from "../screens/HomeScreen";
-import BottomNav from "../components/BottomNav";
+// Import screens
+import BrandingScreen from '../screens/BrandingScreen';
+import UsernameScreen from '../screens/UsernameScreen';
+import HomeScreen from '../screens/HomeScreen';
+import CalendarScreen from '../screens/CalendarScreen';
+import ProfileScreen from '../screens/ProfileScreen';
+import LogPeriodScreen from '../screens/LogPeriodScreen';
 
 // Onboarding Screens
-import CycleRegularityScreen from "../screens/Onboarding/CycleRegularityScreen";
-import SymptomsScreen from "../screens/Onboarding/SymptomsScreen";
-import HealthDisordersScreen from "../screens/Onboarding/HealthDisordersScreen";
-import PeriodLoggingScreen from "../screens/Onboarding/PeriodLoggingScreen";
-import CompletionScreen from "../screens/Onboarding/CompletionScreen";
+import WelcomeScreen from '../screens/Onboarding/WelcomeScreen';
+import LastPeriodScreen from '../screens/Onboarding/LastPeriodScreen';
+import CycleLengthScreen from '../screens/Onboarding/CycleLengthScreen';
+import PeriodLengthScreen from '../screens/Onboarding/PeriodLengthScreen';
 
-// Define navigation props
-export type RootStackParamList = {
-  BrandingScreen: { onStartNow: () => void };
-  UsernameScreen: { setUsername: React.Dispatch<React.SetStateAction<string>> };
-  HomeScreen: { username: string };
-  MainApp: undefined;
-  CycleRegularityScreen: undefined;
-  SymptomsScreen: undefined;
-  HealthDisordersScreen: undefined;
-  PeriodLoggingScreen: undefined;
-  CompletionScreen: undefined;
+// Define navigation types
+type RootStackParamList = {
+  Branding: undefined;
+  Username: undefined;
+  Onboarding: undefined;
+  Main: undefined;
+  LogPeriod: undefined;
 };
 
-type AppNavigatorProps = {
-  isLoggedIn: boolean;
-  setIsLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+type OnboardingStackParamList = {
+  Welcome: undefined;
+  LastPeriod: undefined;
+  CycleLength: { lastPeriod: string };
+  PeriodLength: { lastPeriod: string; cycleLength: number };
 };
 
-const Stack = createStackNavigator<RootStackParamList>();
+type MainTabParamList = {
+  Home: undefined;
+  Calendar: undefined;
+  Profile: undefined;
+};
 
-export default function AppNavigator({ isLoggedIn, setIsLoggedIn }: AppNavigatorProps) {
-  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean | null>(null);
+// Create the navigators
+const RootStack = createNativeStackNavigator<RootStackParamList>();
+const OnboardingStack = createNativeStackNavigator<OnboardingStackParamList>();
+const MainTab = createBottomTabNavigator<MainTabParamList>();
+
+// Onboarding navigator component
+const OnboardingNavigator = () => (
+  <OnboardingStack.Navigator
+    screenOptions={{
+      headerShown: false,
+      animation: 'slide_from_right',
+    }}
+  >
+    <OnboardingStack.Screen name="Welcome" component={WelcomeScreen} />
+    <OnboardingStack.Screen name="LastPeriod" component={LastPeriodScreen} />
+    <OnboardingStack.Screen name="CycleLength" component={CycleLengthScreen} />
+    <OnboardingStack.Screen name="PeriodLength" component={PeriodLengthScreen} />
+  </OnboardingStack.Navigator>
+);
+
+// Main app navigator component with bottom tabs
+const MainNavigator = () => (
+  <MainTab.Navigator
+    screenOptions={({ route }) => ({
+      headerShown: false,
+      tabBarIcon: ({ focused, color, size }) => {
+        let iconName: keyof typeof Ionicons.glyphMap;
+        if (route.name === 'Home') {
+          iconName = focused ? 'home' : 'home-outline';
+        } else if (route.name === 'Calendar') {
+          iconName = focused ? 'calendar' : 'calendar-outline';
+        } else {
+          iconName = focused ? 'person' : 'person-outline';
+        }
+        return <Ionicons name={iconName} size={size} color={color} />;
+      },
+      tabBarActiveTintColor: '#FF6B81',
+      tabBarInactiveTintColor: '#666',
+    })}
+  >
+    <MainTab.Screen name="Home" component={HomeScreen} />
+    <MainTab.Screen name="Calendar" component={CalendarScreen} />
+    <MainTab.Screen name="Profile" component={ProfileScreen} />
+  </MainTab.Navigator>
+);
+
+// Root navigator
+const AppNavigator = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [username, setUsername] = useState<string>('');
+  const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean>(false);
 
   useEffect(() => {
-    const checkOnboardingStatus = async () => {
-      const status = await AsyncStorage.getItem("hasCompletedOnboarding");
-      setHasCompletedOnboarding(status === "true");
-    };
+    checkLoginStatus();
     checkOnboardingStatus();
   }, []);
 
-  if (hasCompletedOnboarding === null) return null; // Prevent flicker while checking onboarding status
+  const checkLoginStatus = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@username');
+      if (value) {
+        setUsername(value);
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      console.error('Error checking login status:', error);
+    }
+  };
+
+  const checkOnboardingStatus = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@onboardingComplete');
+      setHasCompletedOnboarding(!!value);
+    } catch (error) {
+      console.error('Error checking onboarding status:', error);
+    }
+  };
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      {isLoggedIn ? (
-        hasCompletedOnboarding ? (
-          <Stack.Screen name="MainApp" component={BottomNav} />
-        ) : (
+    <NavigationContainer>
+      <RootStack.Navigator screenOptions={{ headerShown: false }}>
+        {!isLoggedIn ? (
           <>
-            <Stack.Screen name="CycleRegularityScreen" component={CycleRegularityScreen} />
-            <Stack.Screen name="SymptomsScreen" component={SymptomsScreen} />
-            <Stack.Screen name="HealthDisordersScreen" component={HealthDisordersScreen} />
-            <Stack.Screen name="PeriodLoggingScreen" component={PeriodLoggingScreen} />
-            <Stack.Screen 
-              name="CompletionScreen" 
-              component={CompletionScreen} 
-              options={{ gestureEnabled: false }} 
+            <RootStack.Screen 
+              name="Branding"
+              children={(props) => (
+                <BrandingScreen
+                  {...props}
+                  onStartNow={() => props.navigation.navigate('Username')}
+                />
+              )}
+            />
+            <RootStack.Screen 
+              name="Username"
+              children={(props) => (
+                <UsernameScreen
+                  {...props}
+                  setIsLoggedIn={setIsLoggedIn}
+                  setUsername={setUsername}
+                />
+              )}
             />
           </>
-        )
-      ) : (
-        <>
-          <Stack.Screen name="BrandingScreen" component={BrandingScreen} />
-          <Stack.Screen name="UsernameScreen" component={UsernameScreen} />
-          <Stack.Screen name="HomeScreen" component={HomeScreen} />
-        </>
-      )}
-    </Stack.Navigator>
+        ) : !hasCompletedOnboarding ? (
+          <RootStack.Screen name="Onboarding" component={OnboardingNavigator} />
+        ) : (
+          <>
+            <RootStack.Screen name="Main" component={MainNavigator} />
+            <RootStack.Screen name="LogPeriod" component={LogPeriodScreen} />
+          </>
+        )}
+      </RootStack.Navigator>
+    </NavigationContainer>
   );
-}
+};
+
+export default AppNavigator;

@@ -1,50 +1,131 @@
-FloraFlow - A period Calendar
+# FloraFlow – A Period Calendar 
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+**FloraFlow** is a smart and elegant period tracking calendar built to help users understand and manage their reproductive health better. Designed with empathy and built with modern tools, Sihana offers free access to pro features, educational insights, and a smooth onboarding journey.
 
-## Get started
+---
 
-1. Install dependencies
+## Table of Contents
 
-   ```bash
-   npm install
-   ```
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Screenshots](#screenshots)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-2. Start the app
+---
 
-   ```bash
-    npx expo start
-   ```
+## About
 
-In the output, you'll find options to open the app in a
+FloraFlow provides a personalized experience to track menstrual cycles, symptoms, and reproductive health disorders. With an intuitive interface and cloud sync, it ensures your data is always safe, accessible, and insightful.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+---
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+## Features
 
-## Get a fresh project
+- 🚀 Expo-powered cross-platform app  
+- 🔐 Username + Password Authentication  
+- 📅 Cycle & symptom logging calendar  
+- 👩‍⚕️ Reproductive health disorder tracker  
+- 📈 Visual insights and progress bars  
+- ✅ Smooth onboarding flow with completion screen  
+- ☁️ Node.js + MongoDB backend for sync (WIP)  
+- 🌓 Dark mode support  
+- 📱 Ready for real-world deployment  
 
-When you're ready, run:
+---
 
+## Tech Stack
+
+- **Framework:** React Native (Expo)  
+- **Backend:** Node.js + Express  
+- **Database:** MongoDB  
+- **Auth:** Username & Password (Custom API)  
+- **Storage:** AsyncStorage  
+- **State Management:** React Context API  
+- **Deployment:** Expo Go / Web (WIP)
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js  
+- Expo CLI  
 ```bash
-npm run reset-project
+  npm install -g expo-cli
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+### Installation
+```bash
+   git clone https://github.com/your-username/Sihana.git
+   cd Sihana - A Period Calendar
+   npm install
+   npx expo start
+```
+### Usage
+- Launch the app using Expo Go on your mobile
+- Sign up or log in using your username & password
+- Go through the onboarding screens:
+- Regularity of cycle
+- Symptoms
+- Health disorders
+- Period logging
+- Completion screen
+- Get redirected to your personal dashboard
 
-## Learn more
+---
 
-To learn more about developing your project with Expo, look at the following resources:
+## Screenshots
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### WELCOME
+   <img src="./assets/Screenshots/group2.png" alt="Branding" />
 
-## Join the community
+### MAIN TABS
+   <img src="./assets/Screenshots/Group1.png" alt="Main-tabs" />
+   
 
-Join our community of developers creating universal apps.
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+## Roadmap
+- Complete backend integration
+- Role-based login for future upgrades
+- Add AI-based prediction features
+- Deploy web version of Sihana
+- Add monthly & weekly health reports
+- Push notifications for reminders
+
+---
+
+## Contributing
+
+We’d love your support!
+```bash
+   # Fork the repo
+   # Create a feature branch
+   git checkout -b feature-branch
+
+   # Make changes and commit
+   git commit -m "Added a new feature"
+
+   # Push and create PR
+   git push origin feature-branch
+```
+
+### License
+
+This project is licensed under the MIT License – see the LICENSE file for details.
+
+---
+
+### Contact
+
+📧 trock3338@gmail.com
+
+🔗 www.linkedin.com/in/aman-singhall
+
+🔗 GitHub Repository
