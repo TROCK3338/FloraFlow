@@ -1,43 +1,61 @@
 import React from "react";
-import { View, Text, ImageBackground, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Text, ImageBackground, StyleSheet, TouchableOpacity, SafeAreaView, StatusBar, Dimensions } from "react-native";
 
 interface BrandingScreenProps {
-  onStartNow: () => void; // Callback to handle "Start Now" action
+  onStartNow: () => void;
 }
 
 export default function BrandingScreen({ onStartNow }: BrandingScreenProps) {
   return (
-    <ImageBackground 
-      source={require("../../assets/images/floraFlow.png")} 
-      style={styles.background}
-      resizeMode="cover"
-    >
-      <View style={styles.overlay}>
-        <Text style={styles.tagline}>Your Cycle, Your Control</Text>
-        <TouchableOpacity 
-          style={styles.startButton} 
-          onPress={onStartNow} // Call the handler to change screen
-        >
-          <Text style={styles.startButtonText}>Start Now</Text>
-        </TouchableOpacity>
-      </View>
-    </ImageBackground>
+    <View style={styles.container}>
+      <StatusBar translucent backgroundColor="transparent" />
+      <ImageBackground
+        source={require("../../assets/images/floraFlow.png")}
+        style={styles.background}
+        imageStyle={styles.imageStyle}
+        resizeMode="cover"
+      >
+        <SafeAreaView style={styles.safeArea}>
+          <View style={styles.overlay}>
+            <Text style={styles.tagline}>Your Cycle, Your Control</Text>
+            <TouchableOpacity
+              style={styles.startButton}
+              onPress={onStartNow}
+            >
+              <Text style={styles.startButtonText}>Start Now</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </ImageBackground>
+    </View>
   );
 }
 
+const { width, height } = Dimensions.get('window');
+
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: width,
+    height: height,
+  },
   background: {
     flex: 1,
     width: "100%",
     height: "100%",
-    justifyContent: "center",
-    alignItems: "center",
+  },
+  imageStyle: {
+    width: width,
+    height: height,
+  },
+  safeArea: {
+    flex: 1,
   },
   overlay: {
-    position: "absolute",
-    bottom: "20%", // Adjust this for better alignment
+    flex: 1,
+    justifyContent: "flex-end",
     alignItems: "center",
-    width: "80%",
+    paddingBottom: "20%",
   },
   tagline: {
     fontSize: 24,
